@@ -36,5 +36,5 @@
         mode: 'u=rwx,go=r'
 
   roles:
-    - ansible-role-oh-my-zsh
+    - role_under_test
 
