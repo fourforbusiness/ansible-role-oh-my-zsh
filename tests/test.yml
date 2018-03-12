@@ -34,7 +34,7 @@
         owner: root
         group: root
         mode: 'u=rwx,go=r'
-
+        
   roles:
     - role_under_test
 
