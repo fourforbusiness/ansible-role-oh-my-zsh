@@ -22,7 +22,7 @@ script:
     sudo docker exec ${container_id} sh -c "cat /home/test_usr2/.zshrc | grep ^plugins= | grep test_plugin3 && cat /home/test_usr2/.zshrc | grep ^plugins= | grep test_plugin4"
   # Check if themes are present
   - >
-    sudo docker exec ${container_id} sh -c "cat /home/test_usr2/.zshrc | grep ^ZSH_THEME=\"test_theme2\""
+    sudo docker exec ${container_id} sh -c "cat /home/test_usr2/.zshrc | grep ^ZSH_THEME=.*test_theme2"
   
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
