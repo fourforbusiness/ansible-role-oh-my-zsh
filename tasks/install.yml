@@ -26,6 +26,7 @@
   args:
     creates: '~{{ item.username }}/.oh-my-zsh'
   with_items: '{{ users }}'
+  when: users | length > 0
 
 - name: set ownership and permissions of oh-my-zsh for users
   become: yes
@@ -39,6 +40,7 @@
     mode: 'go-w'
     recurse: yes
   with_items: '{{ users }}'
+  when: users | length > 0
 
 - name: set default shell for users
   become: yes
@@ -46,6 +48,7 @@
     name: '{{ item.username }}'
     shell: /bin/zsh
   with_items: '{{ users }}'
+  when: users | length > 0
 
 - name: write .zshrc for users
   become: yes
@@ -57,3 +60,4 @@
     group: "{{ (ansible_os_family == 'Suse') | ternary('users', item.username) }}"
     mode: 'u=rw,go=r'
   with_items: '{{ users }}'
+  when: users | length > 0
