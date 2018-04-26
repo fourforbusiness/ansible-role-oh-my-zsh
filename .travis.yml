@@ -1,28 +1,30 @@
 services: docker
 env:
-  - distro: ubuntu1604
-  - distro: ubuntu1404
+- distro: ubuntu1604
+- distro: ubuntu1404
 script:
-  # Configure test script so we can run extra tests after playbook is run.
-  - export container_id=$(date +%s)
-  - export cleanup=false
+- export container_id=$(date +%s)
+- export cleanup=false
+- wget -O ${PWD}/tests/test.sh https://gist.githubusercontent.com/geerlingguy/73ef1e5ee45d8694570f334be385e181/raw/
+- chmod +x ${PWD}/tests/test.sh
+- "${PWD}/tests/test.sh"
+- 'sudo docker exec ${container_id} sh -c "[ -f /home/test_usr1/.zshrc ] && [ -f /home/test_usr2/.zshrc
+  ]"
 
-  - wget -O ${PWD}/tests/test.sh https://gist.githubusercontent.com/geerlingguy/73ef1e5ee45d8694570f334be385e181/raw/
-  
-  - chmod +x ${PWD}/tests/test.sh
-  - "${PWD}/tests/test.sh"
-  
-  # Check if zsh was installed
-  - >
-    sudo docker exec ${container_id} sh -c "[ -f /home/test_usr1/.zshrc ] && [ -f /home/test_usr2/.zshrc ]"
-  # Check if plugins are present
-  - >
-    sudo docker exec ${container_id} sh -c "cat /home/test_usr1/.zshrc | grep ^plugins= | grep test_plugin1 && cat /home/test_usr1/.zshrc | grep ^plugins= | grep test_plugin2"
-  - >
-    sudo docker exec ${container_id} sh -c "cat /home/test_usr2/.zshrc | grep ^plugins= | grep test_plugin3 && cat /home/test_usr2/.zshrc | grep ^plugins= | grep test_plugin4"
-  # Check if themes are present
-  - >
-    sudo docker exec ${container_id} sh -c "cat /home/test_usr2/.zshrc | grep ^ZSH_THEME=.*test_theme2"
-  
+'
+- 'sudo docker exec ${container_id} sh -c "cat /home/test_usr1/.zshrc | grep ^plugins=
+  | grep test_plugin1 && cat /home/test_usr1/.zshrc | grep ^plugins= | grep test_plugin2"
+
+'
+- 'sudo docker exec ${container_id} sh -c "cat /home/test_usr2/.zshrc | grep ^plugins=
+  | grep test_plugin3 && cat /home/test_usr2/.zshrc | grep ^plugins= | grep test_plugin4"
+
+'
+- 'sudo docker exec ${container_id} sh -c "cat /home/test_usr2/.zshrc | grep ^ZSH_THEME=.*test_theme2"
+
+'
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
+  slack:
+    rooms:
+      secure: ech8Pth+dVd6DSlthe2ZMkukZRfcMmLB4TGhBJVdSLbCvdsw3Ugizhzy6o9iViPEgVtMjU55mo6rWNf6Fxb7VqEvjHt1xsT4RDr7qXFKmF5rr/XI+yv8Ut5U8+EC3TOcJSWgH0TYkMOd/xMhKfAAkH5j9wGO8iBrHWjn9nw1BQaXlCoIdGZ7I0Pa5seE3J/pXgUgL3bgW4iVIxS8M7F1m3Bw4FLN3dn6JcaLwCkl2suwIy0IkqOJOMC7rwmFlQzILgY4J88Y66x1ClXc7TyfFEuLT3+xxMcAbVGr5xeni11I78wnKTdedfwGsefJMw3xhKsCQREt8VUehNMrvlUDgJz/NnLz6Ti9PdSPNLGSXhmieBQcbV0KdJwOKqlcSyPZo7huCxP8P33CS16ckCcNd9B56RN+XvB14bOqUSmRyqx2CMLWvLtcee2nkE4CLFemGv7UiKMJtLyPpyS0PN99e2rXy7pHsWIK5qeCIkA/bViB6nKDzF10gTB5axUX+0GiTRMGHjggsW+iXS8jNifCNIADWBtrC6KxqC+mmG8CYDXD7nsTAPiajTKlZz7GHmsEa6PbTkuT1LHYRNCfae4uYGd7Za0+Wc/Cd7h3joymuD9ATgkX1kuR0duFopl4tBLvLJ4PdXROHyoUGxBcdDN+CGGVAmMnJSE8y7sKjCq3qCE=
